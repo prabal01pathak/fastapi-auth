@@ -1,6 +1,5 @@
 """ authentication api"""
 
-import os
 from datetime import datetime
 
 from fastapi import HTTPException, status, Depends, Request, APIRouter
@@ -16,7 +15,6 @@ settings = Settings()
 ALGORITHM = "HS256"
 
 router = APIRouter()
-
 
 
 async def get_current_user(

@@ -9,4 +9,4 @@ load_dotenv()
 class Settings(BaseSettings):
     """application settings"""
 
-    SECRET_KEY: str
+    SECRET_KEY: str = None
