@@ -10,11 +10,13 @@ from fastapi.responses import JSONResponse
 from jose import JWTError, jwt
 
 from .utils import oauth2_scheme
+from .schema import Settings
 
-SECRET_KEY = os.getenv("SECRET_KEY")
+settings = Settings()
 ALGORITHM = "HS256"
 
 router = APIRouter()
+
 
 
 async def get_current_user(
@@ -43,7 +45,7 @@ async def get_current_user(
         authenticate_value = "Bearer"
 
     try:
-        payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
+        payload = jwt.decode(token, settings.SECRET_KEY, algorithms=[ALGORITHM])
         #  validate access token time
         expire = payload.get("exp")
         if datetime.utcnow() > datetime.fromtimestamp(expire):
