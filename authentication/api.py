@@ -2,14 +2,13 @@
 
 from datetime import datetime
 
-from fastapi import HTTPException, status, Depends, Request, APIRouter
-from fastapi.security import SecurityScopes, OAuth2PasswordRequestForm, HTTPBasic
+from fastapi import APIRouter, Depends, HTTPException, Request, status
 from fastapi.responses import JSONResponse
-
+from fastapi.security import HTTPBasic, OAuth2PasswordRequestForm, SecurityScopes
 from jose import JWTError, jwt
 
-from .utils import oauth2_scheme
 from .schema import Settings
+from .utils import oauth2_scheme
 
 settings = Settings()
 ALGORITHM = "HS256"

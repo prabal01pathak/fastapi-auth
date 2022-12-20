@@ -1,7 +1,7 @@
 """ schema for authenticatin app"""
 
-from pydantic import BaseSettings
 from dotenv import load_dotenv
+from pydantic import BaseSettings
 
 load_dotenv()
 
