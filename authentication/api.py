@@ -107,6 +107,7 @@ async def handle_basic_auth(request: Request, exception):
     credentials = await security(request=request)
     scopes = SecurityScopes(scopes=[])
     try:
+        # because we are getting authe token as username from user
         await get_current_user(security_scopes=scopes, token=credentials.username)
     except Exception as _e:
         print("exception while getting user data: ", _e)
