@@ -5,9 +5,7 @@ from fastapi.openapi.utils import get_openapi
 from fastapi.responses import JSONResponse
 from starlette.middleware.cors import CORSMiddleware
 
-
-from .api import router, get_current_user, handle_basic_auth, settings
-
+from .api import get_current_user, handle_basic_auth, router, settings
 
 app = FastAPI(title=settings.TITLE)
 

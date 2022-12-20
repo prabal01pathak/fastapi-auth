@@ -4,7 +4,8 @@ from datetime import datetime
 
 from fastapi import APIRouter, Depends, HTTPException, Request, status
 from fastapi.responses import JSONResponse
-from fastapi.security import HTTPBasic, OAuth2PasswordRequestForm, SecurityScopes
+from fastapi.security import (HTTPBasic, OAuth2PasswordRequestForm,
+                              SecurityScopes)
 from jose import JWTError, jwt
 
 from .schema import Settings
