@@ -43,7 +43,8 @@ async def get_current_user(
         authenticate_value = "Bearer"
 
     try:
-        payload = jwt.decode(token, settings.SECRET_KEY, algorithms=[ALGORITHM])
+        payload = jwt.decode(token, settings.SECRET_KEY,
+                             algorithms=[ALGORITHM])
         #  validate access token time
         expire = payload.get("exp")
         if datetime.utcnow() > datetime.fromtimestamp(expire):
@@ -59,8 +60,8 @@ async def get_current_user(
     for scope in security_scopes.scopes:
         if not scopes.get(scope):
             raise HTTPException(
-                status_code=status.HTTP_401_UNAUTHORIZED,
-                detail="Not enough permissions",
+                status_code=status.HTTP_403_FORBIDDEN,
+                detail={"message": "Not enough permissions", "required": scope},
                 headers={"WWW-Authenticate": authenticate_value},
             )
     return payload
