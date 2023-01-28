@@ -66,6 +66,33 @@ class TokenGenerator:
     def __init__(self):
         ...
 
+    def create_access_token_sync(
+        self, data: dict, expires_mins: int = settings.ACCESS_TOKEN_EXPIRE_MINUTES
+    ):
+        """
+        The create_access_token function creates a JWT access token.
+        It takes in the data dictionary and an optional expires_delta
+        value, which determines when the token will expire.
+        The default is 15 minutes.
+        :param data:dict: Used to Pass in the data that needs to be encoded.
+        :param expires_delta:Optional[timedelta]=None: Used to Set the
+            expiration time of the token.
+        :return: A json web token (jwt) that has been signed using the secret_key.
+        :doc-author: Trelent
+        """
+        to_encode = data
+        if not "sub" in to_encode:
+            raise HTTPException(
+                status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
+                detail="no subject found",
+            )
+        expire = datetime.utcnow() + timedelta(minutes=expires_mins)
+        to_encode.update({"exp": expire})
+        encoded_jwt = jwt.encode(
+            to_encode, settings.SECRET_KEY, algorithm=settings.ALGORITHM
+        )
+        return encoded_jwt
+
     async def create_access_token(
         self, data: dict, expires_mins: int = settings.ACCESS_TOKEN_EXPIRE_MINUTES
     ):
