@@ -4,15 +4,11 @@ from datetime import datetime
 
 from fastapi import APIRouter, Depends, HTTPException, Request, status
 from fastapi.responses import JSONResponse
-from fastapi.security import (HTTPBasic, OAuth2PasswordRequestForm,
-                              SecurityScopes)
+from fastapi.security import HTTPBasic, OAuth2PasswordRequestForm, SecurityScopes
 from jose import JWTError, jwt
 
-from .schema import Settings
+from .schema import settings
 from .utils import oauth2_scheme
-
-settings = Settings()
-ALGORITHM = "HS256"
 
 router = APIRouter()
 
@@ -43,8 +39,9 @@ async def get_current_user(
         authenticate_value = "Bearer"
 
     try:
-        payload = jwt.decode(token, settings.SECRET_KEY,
-                             algorithms=[ALGORITHM])
+        payload = jwt.decode(
+            token, settings.SECRET_KEY, algorithms=[settings.ALGORITHM]
+        )
         #  validate access token time
         expire = payload.get("exp")
         if datetime.utcnow() > datetime.fromtimestamp(expire):
@@ -57,13 +54,15 @@ async def get_current_user(
     except JWTError as _e:
         raise credentials_exception from _e
     scopes = payload.get("scopes", {})
-    for scope in security_scopes.scopes:
-        if not scopes.get(scope):
-            raise HTTPException(
-                status_code=status.HTTP_403_FORBIDDEN,
-                detail={"message": "Not enough permissions", "required": scope},
-                headers={"WWW-Authenticate": authenticate_value},
-            )
+    if len(security_scopes.scopes) > 0:
+        for scope in security_scopes.scopes:
+            if scopes.get(scope):
+                return payload
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail={"message": "Not enough permissions", "required": scope},
+            headers={"WWW-Authenticate": authenticate_value},
+        )
     return payload
 
 
