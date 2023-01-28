@@ -86,10 +86,7 @@ class TokenGenerator:
                 status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
                 detail="no subject found",
             )
-        if expires_mins:
-            expire = datetime.utcnow() + timedelta(minutes=expires_mins)
-        else:
-            expire = datetime.utcnow() + timedelta(minutes=15)
+        expire = datetime.utcnow() + timedelta(minutes=expires_mins)
         to_encode.update({"exp": expire})
         encoded_jwt = jwt.encode(
             to_encode, settings.SECRET_KEY, algorithm=settings.ALGORITHM
