@@ -11,6 +11,7 @@ from jose import jwt
 
 from .schema import settings
 
+
 class OAuth2PasswordBearerCookie(OAuth2):
     """oauth 2 password bearer cookie class"""
 
@@ -59,13 +60,15 @@ class OAuth2PasswordBearerCookie(OAuth2):
         return param
 
 
-
 class TokenGenerator:
-    """ token generator"""
+    """token generator"""
+
     def __init__(self):
         ...
 
-    async def create_access_token(self, data: dict, expires_mins: int = None):
+    async def create_access_token(
+        self, data: dict, expires_mins: int = settings.ACCESS_TOKEN_EXPIRE_MINUTES
+    ):
         """
         The create_access_token function creates a JWT access token.
         It takes in the data dictionary and an optional expires_delta
@@ -81,14 +84,17 @@ class TokenGenerator:
         if not "sub" in to_encode:
             raise HTTPException(
                 status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
-                detail="no subject found"
+                detail="no subject found",
             )
         if expires_mins:
             expire = datetime.utcnow() + timedelta(minutes=expires_mins)
         else:
             expire = datetime.utcnow() + timedelta(minutes=15)
         to_encode.update({"exp": expire})
-        encoded_jwt = jwt.encode(to_encode, settings.SECRET_KEY, algorithm=settings.ALGORITHM)
+        encoded_jwt = jwt.encode(
+            to_encode, settings.SECRET_KEY, algorithm=settings.ALGORITHM
+        )
         return encoded_jwt
+
 
 oauth2_scheme = OAuth2PasswordBearerCookie(tokenUrl="token")
