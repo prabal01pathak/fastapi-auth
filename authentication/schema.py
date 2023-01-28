@@ -7,6 +7,8 @@ from pydantic import BaseSettings
 
 
 SECRET_KEY = os.getenv("SECRET_KEY")
+
+
 class Settings(BaseSettings):
     """application settings"""
 
@@ -15,7 +17,7 @@ class Settings(BaseSettings):
     VERSION: Optional[str] = "0.0.1"
     DESCRIPTION: Optional[str] = "Oauth2 Implementation"
     ALGORITHM: str = "HS256"
-    ACCESS_TOKEN_EXPIRE_MINUTES: int = 5  # mins
+    ACCESS_TOKEN_EXPIRE_MINUTES: int = 335  # mins
 
 
 settings = Settings()
