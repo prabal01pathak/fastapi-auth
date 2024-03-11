@@ -9,7 +9,7 @@ readme = "README.md"
 [tool.poetry.dependencies]
 python = "^3.8"
 fastapi = "^0.110.0"
-uvicorn = {extras = ["standard"], version = "^0.28.2"}
+uvicorn = {extras = ["standard"], version = "^0.28.0"}
 pydantic = {extras = ["email"], version = "^2.6.3"}
 python-jose = "^3.3.0"
 
